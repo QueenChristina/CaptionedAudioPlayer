@@ -1,0 +1,355 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://UI/Path.tscn" type="PackedScene" id=1]
+[ext_resource path="res://VideoParts/Caption.gd" type="Script" id=2]
+[ext_resource path="res://VideoParts/Timeline.gd" type="Script" id=3]
+[ext_resource path="res://VideoParts/Volume.gd" type="Script" id=4]
+[ext_resource path="res://VideoParts/SpeedText.gd" type="Script" id=5]
+[ext_resource path="res://UI/LoadVideo.gd" type="Script" id=6]
+[ext_resource path="res://UI/Sound.png" type="Texture" id=7]
+[ext_resource path="res://UI/Mute.png" type="Texture" id=8]
+[ext_resource path="res://UI/Play.png" type="Texture" id=9]
+[ext_resource path="res://UI/Wind.png" type="Texture" id=10]
+[ext_resource path="res://UI/Pause.png" type="Texture" id=11]
+[ext_resource path="res://UI/Rewind.png" type="Texture" id=12]
+[ext_resource path="res://UI/OpenSans-Regular.ttf" type="DynamicFontData" id=13]
+[ext_resource path="res://VideoParts/Player.gd" type="Script" id=14]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.815686 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 20
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 0 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.0823529 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0, 0, 0, 0.439216 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0, 0, 0, 0 )
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0, 0, 0, 0.682353 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=9]
+size = 20
+extra_spacing_top = -6
+extra_spacing_bottom = -4
+font_data = ExtResource( 13 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 34.7436, 50.1916 )
+
+[node name="Player" type="Node2D"]
+script = ExtResource( 14 )
+
+[node name="Caption" type="RichTextLabel" parent="."]
+margin_left = 197.586
+margin_top = 51.2078
+margin_right = 841.586
+margin_bottom = 80.2078
+rect_min_size = Vector2( 300, 0 )
+custom_styles/normal = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = true
+fit_content_height = true
+scroll_active = false
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Timeline" type="HSlider" parent="."]
+margin_left = 168.0
+margin_top = 11.0
+margin_right = 884.0
+margin_bottom = 43.0
+mouse_default_cursor_shape = 2
+rounded = true
+tick_count = 20
+ticks_on_borders = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time" type="RichTextLabel" parent="Timeline"]
+margin_left = -47.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = 28.0
+focus_mode = 2
+custom_styles/normal = SubResource( 3 )
+custom_fonts/normal_font = SubResource( 4 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+fit_content_height = true
+scroll_active = false
+selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Pause" type="CheckBox" parent="Timeline"]
+margin_left = -163.0
+margin_top = -6.0
+margin_right = -123.0
+margin_bottom = 34.0
+mouse_default_cursor_shape = 2
+custom_icons/checked = ExtResource( 9 )
+custom_icons/unchecked = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Forward" type="Button" parent="Timeline"]
+margin_left = -81.8857
+margin_top = -1.0
+margin_right = -49.8857
+margin_bottom = 31.0
+mouse_default_cursor_shape = 2
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+icon = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Backward" type="Button" parent="Timeline"]
+margin_left = -117.886
+margin_top = -1.0
+margin_right = -85.8857
+margin_bottom = 31.0
+mouse_default_cursor_shape = 2
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+icon = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Speed" type="LineEdit" parent="Timeline"]
+margin_left = 719.75
+margin_top = 1.0
+margin_right = 781.75
+margin_bottom = 28.0
+rect_clip_content = true
+custom_styles/normal = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
+align = 1
+placeholder_text = "Speed"
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Volume" type="CheckBox" parent="."]
+margin_left = 955.0
+margin_top = 8.0
+margin_right = 995.0
+margin_bottom = 48.0
+mouse_filter = 1
+custom_icons/checked = ExtResource( 8 )
+custom_icons/unchecked = ExtResource( 7 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VSlider" type="VSlider" parent="Volume"]
+visible = false
+margin_top = 40.0
+margin_right = 40.0
+margin_bottom = 149.0
+min_value = -20.0
+max_value = 20.0
+tick_count = 2
+ticks_on_borders = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area" type="Area2D" parent="Volume"]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Volume/Area"]
+position = Vector2( 19.7564, 94.9416 )
+shape = SubResource( 10 )
+
+[node name="LoadVideo" type="Button" parent="."]
+margin_left = 13.0
+margin_top = 449.0
+margin_right = 52.0
+margin_bottom = 489.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog" type="FileDialog" parent="LoadVideo"]
+margin_left = 259.011
+margin_top = -322.681
+margin_right = 715.011
+margin_bottom = 2.3194
+window_title = "Open a File"
+mode = 0
+access = 2
+current_dir = "/CodingProjects/MiniVideo/videoPlayer"
+current_path = "/CodingProjects/MiniVideo/videoPlayer/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settings" type="WindowDialog" parent="LoadVideo"]
+visible = true
+margin_left = 339.416
+margin_top = -309.762
+margin_right = 647.416
+margin_bottom = -35.7622
+popup_exclusive = true
+window_title = "Load New Video"
+resizable = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Upload" type="VBoxContainer" parent="LoadVideo/Settings"]
+margin_left = 37.0
+margin_top = 30.9315
+margin_right = 276.0
+margin_bottom = 106.932
+custom_constants/separation = 30
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Audio" type="Button" parent="LoadVideo/Settings/Upload"]
+margin_right = 239.0
+margin_bottom = 20.0
+text = "Upload Audio"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transcript" type="Button" parent="LoadVideo/Settings/Upload"]
+margin_top = 50.0
+margin_right = 239.0
+margin_bottom = 70.0
+text = "Upload Transcript(s)"
+
+[node name="PathAudio" type="ScrollContainer" parent="LoadVideo/Settings"]
+margin_left = 48.0
+margin_top = 55.9315
+margin_right = 266.0
+margin_bottom = 72.9315
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Path" parent="LoadVideo/Settings/PathAudio" instance=ExtResource( 1 )]
+margin_right = 175.0
+file_type = "audio"
+
+[node name="PathTrancripts" type="ScrollContainer" parent="LoadVideo/Settings"]
+margin_left = 47.0
+margin_top = 106.932
+margin_right = 268.0
+margin_bottom = 180.932
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="LoadVideo/Settings/PathTrancripts"]
+margin_right = 175.0
+margin_bottom = 36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Path" parent="LoadVideo/Settings/PathTrancripts/VBox" instance=ExtResource( 1 )]
+margin_right = 175.0
+
+[node name="Path2" parent="LoadVideo/Settings/PathTrancripts/VBox" instance=ExtResource( 1 )]
+margin_top = 20.0
+margin_right = 175.0
+margin_bottom = 36.0
+
+[node name="Save" type="Button" parent="LoadVideo/Settings"]
+margin_left = 239.049
+margin_top = 246.881
+margin_right = 301.049
+margin_bottom = 266.881
+text = "Save"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cancel" type="Button" parent="LoadVideo/Settings"]
+visible = false
+margin_left = 273.0
+margin_top = 9.0
+margin_right = 298.0
+margin_bottom = 29.0
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="Caption" to="Caption" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Caption" to="Caption" method="_on_mouse_exited"]
+[connection signal="value_changed" from="Timeline" to="Timeline" method="_on_value_changed"]
+[connection signal="value_changed" from="Timeline" to="." method="_on_Timeline_value_changed"]
+[connection signal="toggled" from="Timeline/Pause" to="." method="_on_Pause_toggled"]
+[connection signal="pressed" from="Timeline/Forward" to="." method="_on_Forward_pressed"]
+[connection signal="pressed" from="Timeline/Backward" to="." method="_on_Backward_pressed"]
+[connection signal="speed_changed" from="Timeline/Speed" to="." method="_on_speed_changed"]
+[connection signal="text_changed" from="Timeline/Speed" to="Timeline/Speed" method="_on_text_changed"]
+[connection signal="finished" from="AudioPlayer" to="." method="_on_AudioPlayer_finished"]
+[connection signal="mouse_entered" from="Volume" to="Volume" method="_on_Volume_mouse_entered"]
+[connection signal="toggled" from="Volume" to="Volume" method="_on_Volume_toggled"]
+[connection signal="volume_changed" from="Volume" to="." method="_on_Volume_changed"]
+[connection signal="value_changed" from="Volume/VSlider" to="Volume" method="_on_value_changed"]
+[connection signal="mouse_entered" from="Volume/Area" to="Volume" method="_on_Area_mouse_entered"]
+[connection signal="mouse_exited" from="Volume/Area" to="Volume" method="_on_Area_mouse_exited"]
+[connection signal="pressed" from="LoadVideo" to="LoadVideo" method="_on_LoadVideo_pressed"]
+[connection signal="popup_hide" from="LoadVideo/Settings" to="LoadVideo" method="_on_Cancel_pressed"]
+[connection signal="pressed" from="LoadVideo/Settings/Upload/Audio" to="LoadVideo" method="_on_UploadAudio_pressed"]
+[connection signal="pressed" from="LoadVideo/Settings/Upload/Transcript" to="LoadVideo" method="_on_UploadTranscript_pressed"]
+[connection signal="pressed" from="LoadVideo/Settings/Save" to="LoadVideo" method="_on_Save_pressed"]
+[connection signal="pressed" from="LoadVideo/Settings/Cancel" to="LoadVideo" method="_on_Cancel_pressed"]
