@@ -1,10 +1,10 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://UI/Path.tscn" type="PackedScene" id=1]
 [ext_resource path="res://VideoParts/Caption.gd" type="Script" id=2]
 [ext_resource path="res://VideoParts/Timeline.gd" type="Script" id=3]
 [ext_resource path="res://VideoParts/Volume.gd" type="Script" id=4]
-[ext_resource path="res://VideoParts/SpeedText.gd" type="Script" id=5]
+[ext_resource path="res://UI/NumTextEdit.tscn" type="PackedScene" id=5]
 [ext_resource path="res://UI/LoadVideo.gd" type="Script" id=6]
 [ext_resource path="res://UI/Sound.png" type="Texture" id=7]
 [ext_resource path="res://UI/Mute.png" type="Texture" id=8]
@@ -14,6 +14,37 @@
 [ext_resource path="res://UI/Rewind.png" type="Texture" id=12]
 [ext_resource path="res://UI/OpenSans-Regular.ttf" type="DynamicFontData" id=13]
 [ext_resource path="res://VideoParts/Player.gd" type="Script" id=14]
+[ext_resource path="res://UI/Upload.png" type="Texture" id=15]
+[ext_resource path="res://UI/CCRed.png" type="Texture" id=16]
+[ext_resource path="res://UI/CC.png" type="Texture" id=17]
+[ext_resource path="res://VideoParts/CC.gd" type="Script" id=18]
+[ext_resource path="res://VideoParts/Settings.gd" type="Script" id=19]
+[ext_resource path="res://UI/Search.png" type="Texture" id=20]
+[ext_resource path="res://VideoParts/Search.gd" type="Script" id=21]
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.721569, 0.721569, 0.721569, 0.423529 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.878431, 0.878431, 0.878431, 0.87451 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 0.6, 0.6, 0.6, 0.196078 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.815686 )
@@ -48,40 +79,97 @@ border_color = Color( 0, 0, 0, 1 )
 bg_color = Color( 0, 0, 0, 0 )
 border_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 0, 0, 0, 0.682353 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0, 0, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-anti_aliasing = false
-
-[sub_resource type="DynamicFont" id=9]
-size = 20
-extra_spacing_top = -6
-extra_spacing_bottom = -4
-font_data = ExtResource( 13 )
-
-[sub_resource type="RectangleShape2D" id=10]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 34.7436, 50.1916 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 20
+font_data = ExtResource( 13 )
 
 [node name="Player" type="Node2D"]
 script = ExtResource( 14 )
 
-[node name="Caption" type="RichTextLabel" parent="."]
-margin_left = 197.586
-margin_top = 51.2078
-margin_right = 841.586
-margin_bottom = 80.2078
+[node name="Search" type="Button" parent="."]
+margin_left = 960.0
+margin_top = 462.0
+margin_right = 994.0
+margin_bottom = 496.0
+hint_tooltip = "Search audio transcript"
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 10 )
+custom_styles/normal = SubResource( 11 )
+toggle_mode = true
+icon = ExtResource( 20 )
+script = ExtResource( 21 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Window" type="WindowDialog" parent="Search"]
+visible = true
+margin_left = -704.118
+margin_top = -342.849
+margin_right = -197.118
+margin_bottom = -17.849
+rect_min_size = Vector2( 200, 200 )
+mouse_filter = 1
+window_title = "Search Video"
+resizable = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scroll" type="ScrollContainer" parent="Search/Window"]
+anchor_left = 0.038
+anchor_top = 0.055
+anchor_right = 0.038
+anchor_bottom = 0.055
+margin_left = -1.266
+margin_top = 27.125
+margin_right = 473.734
+margin_bottom = 292.125
+mouse_filter = 1
+follow_focus = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="Search/Window/Scroll"]
+
+[node name="LineEdit" type="LineEdit" parent="Search/Window"]
+margin_left = 16.0
+margin_top = 11.0
+margin_right = 496.0
+margin_bottom = 41.0
+placeholder_text = "Search transcript"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CheckBox" parent="."]
+margin_left = 849.581
+margin_top = 5.55703
+margin_right = 889.581
+margin_bottom = 45.557
+custom_icons/checked = ExtResource( 16 )
+custom_icons/unchecked = ExtResource( 17 )
+script = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Caption" type="RichTextLabel" parent="CC"]
+margin_left = -651.995
+margin_top = 45.6508
+margin_right = -7.99493
+margin_bottom = 74.6508
 rect_min_size = Vector2( 300, 0 )
 custom_styles/normal = SubResource( 1 )
 custom_fonts/normal_font = SubResource( 2 )
 bbcode_enabled = true
+bbcode_text = "[center]Caption[/center]"
+text = "Caption"
 fit_content_height = true
 scroll_active = false
 script = ExtResource( 2 )
@@ -93,10 +181,11 @@ __meta__ = {
 autostart = true
 
 [node name="Timeline" type="HSlider" parent="."]
-margin_left = 168.0
+margin_left = 175.0
 margin_top = 11.0
-margin_right = 884.0
+margin_right = 847.0
 margin_bottom = 43.0
+hint_tooltip = "Timeline"
 mouse_default_cursor_shape = 2
 rounded = true
 tick_count = 20
@@ -107,9 +196,9 @@ __meta__ = {
 }
 
 [node name="Time" type="RichTextLabel" parent="Timeline"]
-margin_left = -47.0
+margin_left = -60.0
 margin_top = 4.0
-margin_right = -4.0
+margin_right = -3.0
 margin_bottom = 28.0
 focus_mode = 2
 custom_styles/normal = SubResource( 3 )
@@ -124,10 +213,11 @@ __meta__ = {
 }
 
 [node name="Pause" type="CheckBox" parent="Timeline"]
-margin_left = -163.0
+margin_left = -169.721
 margin_top = -6.0
-margin_right = -123.0
+margin_right = -129.721
 margin_bottom = 34.0
+hint_tooltip = "Pause"
 mouse_default_cursor_shape = 2
 custom_icons/checked = ExtResource( 9 )
 custom_icons/unchecked = ExtResource( 11 )
@@ -136,10 +226,11 @@ __meta__ = {
 }
 
 [node name="Forward" type="Button" parent="Timeline"]
-margin_left = -81.8857
+margin_left = -88.6072
 margin_top = -1.0
-margin_right = -49.8857
+margin_right = -56.6072
 margin_bottom = 31.0
+hint_tooltip = "Skip forward 10 sec"
 mouse_default_cursor_shape = 2
 custom_styles/hover = SubResource( 5 )
 custom_styles/pressed = SubResource( 6 )
@@ -150,10 +241,11 @@ __meta__ = {
 }
 
 [node name="Backward" type="Button" parent="Timeline"]
-margin_left = -117.886
+margin_left = -124.607
 margin_top = -1.0
-margin_right = -85.8857
+margin_right = -92.6071
 margin_bottom = 31.0
+hint_tooltip = "Skip backward 10 sec"
 mouse_default_cursor_shape = 2
 custom_styles/hover = SubResource( 5 )
 custom_styles/pressed = SubResource( 6 )
@@ -163,20 +255,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed" type="LineEdit" parent="Timeline"]
-margin_left = 719.75
-margin_top = 1.0
-margin_right = 781.75
-margin_bottom = 28.0
-rect_clip_content = true
-custom_styles/normal = SubResource( 8 )
-custom_fonts/font = SubResource( 9 )
-align = 1
-placeholder_text = "Speed"
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Speed" parent="Timeline" instance=ExtResource( 5 )]
+margin_left = 720.0
+margin_right = 782.0
+hint_tooltip = "Speed multiplier"
+max_length = 5
+caret_blink = true
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
 
@@ -185,6 +269,7 @@ margin_left = 955.0
 margin_top = 8.0
 margin_right = 995.0
 margin_bottom = 48.0
+hint_tooltip = "Volume"
 mouse_filter = 1
 custom_icons/checked = ExtResource( 8 )
 custom_icons/unchecked = ExtResource( 7 )
@@ -198,8 +283,8 @@ visible = false
 margin_top = 40.0
 margin_right = 40.0
 margin_bottom = 149.0
-min_value = -20.0
-max_value = 20.0
+min_value = -50.0
+max_value = 30.0
 tick_count = 2
 ticks_on_borders = true
 __meta__ = {
@@ -210,58 +295,58 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Volume/Area"]
 position = Vector2( 19.7564, 94.9416 )
-shape = SubResource( 10 )
+shape = SubResource( 8 )
 
 [node name="LoadVideo" type="Button" parent="."]
-margin_left = 13.0
-margin_top = 449.0
-margin_right = 52.0
+margin_left = 12.37
+margin_top = 455.0
+margin_right = 171.37
 margin_bottom = 489.0
+hint_tooltip = "Choose files and settings to upload new audio and transcript."
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 10 )
+custom_styles/normal = SubResource( 11 )
+custom_fonts/font = SubResource( 12 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0, 0, 0, 1 )
+text = "New Video"
+icon = ExtResource( 15 )
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDialog" type="FileDialog" parent="LoadVideo"]
-margin_left = 259.011
-margin_top = -322.681
-margin_right = 715.011
-margin_bottom = 2.3194
-window_title = "Open a File"
-mode = 0
-access = 2
-current_dir = "/CodingProjects/MiniVideo/videoPlayer"
-current_path = "/CodingProjects/MiniVideo/videoPlayer/"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Settings" type="WindowDialog" parent="LoadVideo"]
-visible = true
-margin_left = 339.416
-margin_top = -309.762
-margin_right = 647.416
-margin_bottom = -35.7622
+margin_left = 307.091
+margin_top = -321.864
+margin_right = 745.091
+margin_bottom = 7.13611
+rect_min_size = Vector2( 430, 325 )
+hint_tooltip = "Upload new video with audio and transcript. Upload nothing to keep prevous files."
 popup_exclusive = true
 window_title = "Load New Video"
 resizable = true
+script = ExtResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Upload" type="VBoxContainer" parent="LoadVideo/Settings"]
-margin_left = 37.0
-margin_top = 30.9315
-margin_right = 276.0
-margin_bottom = 106.932
+margin_left = 123.059
+margin_top = 31.0
+margin_right = 294.059
+margin_bottom = 107.0
 custom_constants/separation = 30
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Audio" type="Button" parent="LoadVideo/Settings/Upload"]
-margin_right = 239.0
+margin_right = 171.0
 margin_bottom = 20.0
+hint_tooltip = "Choose files to upload audio"
 text = "Upload Audio"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -269,15 +354,16 @@ __meta__ = {
 
 [node name="Transcript" type="Button" parent="LoadVideo/Settings/Upload"]
 margin_top = 50.0
-margin_right = 239.0
+margin_right = 171.0
 margin_bottom = 70.0
+hint_tooltip = "Choose files to upload transcript. Timestamps should be [hours:minutes:seconds]"
 text = "Upload Transcript(s)"
 
 [node name="PathAudio" type="ScrollContainer" parent="LoadVideo/Settings"]
-margin_left = 48.0
-margin_top = 55.9315
-margin_right = 266.0
-margin_bottom = 72.9315
+margin_left = 31.0
+margin_top = 53.0
+margin_right = 412.0
+margin_bottom = 78.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -287,59 +373,121 @@ margin_right = 175.0
 file_type = "audio"
 
 [node name="PathTrancripts" type="ScrollContainer" parent="LoadVideo/Settings"]
-margin_left = 47.0
-margin_top = 106.932
-margin_right = 268.0
-margin_bottom = 180.932
+margin_left = 33.0
+margin_top = 107.0
+margin_right = 411.0
+margin_bottom = 206.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBox" type="VBoxContainer" parent="LoadVideo/Settings/PathTrancripts"]
-margin_right = 175.0
-margin_bottom = 36.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Path" parent="LoadVideo/Settings/PathTrancripts/VBox" instance=ExtResource( 1 )]
-margin_right = 175.0
+[node name="Numbers" type="Label" parent="LoadVideo/Settings"]
+margin_left = 63.2405
+margin_top = 235.233
+margin_right = 344.241
+margin_bottom = 249.233
+text = "Original Audio Settings [relative to captions]"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Path2" parent="LoadVideo/Settings/PathTrancripts/VBox" instance=ExtResource( 1 )]
-margin_top = 20.0
-margin_right = 175.0
-margin_bottom = 36.0
+[node name="Offset" parent="LoadVideo/Settings" instance=ExtResource( 5 )]
+margin_left = 33.0964
+margin_top = 253.668
+margin_right = 205.097
+margin_bottom = 280.668
+hint_tooltip = "Original start time of audio relative to caption timestamps in seconds.
+Leave blank if unsure."
+placeholder_text = "Start Time Offset"
+type = "ogoffset"
+
+[node name="Speed" parent="LoadVideo/Settings" instance=ExtResource( 5 )]
+margin_left = 220.049
+margin_top = 253.198
+margin_right = 389.049
+margin_bottom = 280.198
+hint_tooltip = "Original speed audio was recorded at relative to caption timestamps in seconds.
+Leave blank if unsure."
+placeholder_text = "Speed (Original)"
+type = "ogspeed"
 
 [node name="Save" type="Button" parent="LoadVideo/Settings"]
-margin_left = 239.049
-margin_top = 246.881
-margin_right = 301.049
-margin_bottom = 266.881
+margin_left = 350.02
+margin_top = 287.638
+margin_right = 412.02
+margin_bottom = 307.638
+hint_tooltip = "Apply settings"
 text = "Save"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Cancel" type="Button" parent="LoadVideo/Settings"]
-visible = false
-margin_left = 273.0
-margin_top = 9.0
-margin_right = 298.0
-margin_bottom = 29.0
-text = "X"
+[node name="Clear" type="Button" parent="LoadVideo/Settings"]
+margin_left = 3.89642
+margin_top = 3.70268
+margin_right = 68.8964
+margin_bottom = 23.7027
+hint_tooltip = "Clear all values and files"
+text = "Clear All"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="mouse_entered" from="Caption" to="Caption" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Caption" to="Caption" method="_on_mouse_exited"]
-[connection signal="value_changed" from="Timeline" to="Timeline" method="_on_value_changed"]
+[node name="FileDialogAudio" type="FileDialog" parent="LoadVideo"]
+margin_left = 233.395
+margin_top = -359.892
+margin_right = 783.395
+margin_bottom = 24.108
+window_title = "Open a File"
+resizable = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.mp3", "*.ogg", "*.wav" )
+current_dir = "/"
+current_path = "/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialogTranscript" type="FileDialog" parent="LoadVideo"]
+margin_left = 233.395
+margin_top = -359.892
+margin_right = 782.395
+margin_bottom = 23.108
+window_title = "Open File(s)"
+resizable = true
+mode = 1
+access = 2
+filters = PoolStringArray( "*.html", "*.txt" )
+current_dir = "/"
+current_path = "/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="caption_changed" from="." to="Search" method="_on_caption_changed"]
+[connection signal="new_captions" from="." to="Search" method="_on_new_captions"]
+[connection signal="go_to_caption" from="Search" to="." method="set_video_time"]
+[connection signal="go_to_caption" from="Search" to="Timeline" method="_on_Search_go_to_caption"]
+[connection signal="toggled" from="Search" to="Search" method="_on_Search_toggled"]
+[connection signal="resized" from="Search/Window" to="Search" method="_on_Window_resized"]
+[connection signal="text_entered" from="Search/Window/LineEdit" to="Search" method="search_captions"]
+[connection signal="toggled" from="CC" to="CC" method="_on_CC_toggled"]
+[connection signal="mouse_entered" from="CC/Caption" to="CC/Caption" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CC/Caption" to="CC/Caption" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Timeline" to="Timeline" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Timeline" to="Timeline" method="_on_mouse_exited"]
 [connection signal="value_changed" from="Timeline" to="." method="_on_Timeline_value_changed"]
+[connection signal="value_changed" from="Timeline" to="Timeline" method="_on_value_changed"]
 [connection signal="toggled" from="Timeline/Pause" to="." method="_on_Pause_toggled"]
 [connection signal="pressed" from="Timeline/Forward" to="." method="_on_Forward_pressed"]
 [connection signal="pressed" from="Timeline/Backward" to="." method="_on_Backward_pressed"]
 [connection signal="speed_changed" from="Timeline/Speed" to="." method="_on_speed_changed"]
-[connection signal="text_changed" from="Timeline/Speed" to="Timeline/Speed" method="_on_text_changed"]
 [connection signal="finished" from="AudioPlayer" to="." method="_on_AudioPlayer_finished"]
 [connection signal="mouse_entered" from="Volume" to="Volume" method="_on_Volume_mouse_entered"]
 [connection signal="toggled" from="Volume" to="Volume" method="_on_Volume_toggled"]
@@ -347,9 +495,15 @@ __meta__ = {
 [connection signal="value_changed" from="Volume/VSlider" to="Volume" method="_on_value_changed"]
 [connection signal="mouse_entered" from="Volume/Area" to="Volume" method="_on_Area_mouse_entered"]
 [connection signal="mouse_exited" from="Volume/Area" to="Volume" method="_on_Area_mouse_exited"]
+[connection signal="load_new_video" from="LoadVideo" to="." method="_on_load_new_video"]
 [connection signal="pressed" from="LoadVideo" to="LoadVideo" method="_on_LoadVideo_pressed"]
-[connection signal="popup_hide" from="LoadVideo/Settings" to="LoadVideo" method="_on_Cancel_pressed"]
+[connection signal="popup_hide" from="LoadVideo/Settings" to="LoadVideo" method="hide_settings"]
+[connection signal="resized" from="LoadVideo/Settings" to="LoadVideo/Settings" method="_on_resized"]
 [connection signal="pressed" from="LoadVideo/Settings/Upload/Audio" to="LoadVideo" method="_on_UploadAudio_pressed"]
 [connection signal="pressed" from="LoadVideo/Settings/Upload/Transcript" to="LoadVideo" method="_on_UploadTranscript_pressed"]
+[connection signal="ogoffset_changed" from="LoadVideo/Settings/Offset" to="LoadVideo" method="_on_start_offset_changed"]
+[connection signal="ogspeed_changed" from="LoadVideo/Settings/Speed" to="LoadVideo" method="_on_Speed_changed"]
 [connection signal="pressed" from="LoadVideo/Settings/Save" to="LoadVideo" method="_on_Save_pressed"]
-[connection signal="pressed" from="LoadVideo/Settings/Cancel" to="LoadVideo" method="_on_Cancel_pressed"]
+[connection signal="pressed" from="LoadVideo/Settings/Clear" to="LoadVideo" method="clear_settings"]
+[connection signal="file_selected" from="LoadVideo/FileDialogAudio" to="LoadVideo" method="_on_Audio_file_selected"]
+[connection signal="files_selected" from="LoadVideo/FileDialogTranscript" to="LoadVideo" method="_on_Transcript_files_selected"]

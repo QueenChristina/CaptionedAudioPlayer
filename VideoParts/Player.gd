@@ -1,11 +1,14 @@
 extends Node2D
 
-onready var Caption = $Caption # current caption on screen
+onready var Caption = $CC/Caption # current caption on screen
 onready var One_Sec_Timer = $Timer # one second timer, use signal to check if change caption
 onready var Timeline = $Timeline # timeline of audio
 onready var curr_audio = $AudioPlayer
 
 # TO DO: Optimize a few things [less function calls]
+# Changing exe icon - use imagegimmick and gimp, and rcredit
+# https://docs.godotengine.org/en/stable/getting_started/workflow/export/changing_application_icon_for_windows.html
+# https://github.com/godotengine/godot/issues/35735
 
 # Godot doesn't support pdf https://www.reddit.com/r/godot/comments/lbdk1l/can_godot_open_and_display_pdf_files/
 # Try using python to convert a pdf page to image on command given pdf and page number
@@ -22,6 +25,11 @@ var video_paused = false # tracks if video paused
 # Time stamp deliminator in transcript.
 var DELIM_TIME_STAMP = {"begin" : " [", "end" : "] "}
 var REWIND_TIME = 10 # amount of seconds to skip video in increments by if click forward / backward button
+
+# Sends signal with captions
+signal new_captions(captions)
+signal caption_changed(new_caption)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Transparent for caption player - note settings must be enabled too.
@@ -29,12 +37,11 @@ func _ready():
 	# get_tree().get_root().set_transparent_background(true)
 	
 	One_Sec_Timer.connect("timeout", self, "on_timer_timeout")
+	pause_video()
+	get_node("Timeline/Pause").pressed = true
 	# new_video(1, "res://W3L1-BinaryRelationsPart1.mp3", "res://Week 3 L1_ Binary Relations-transcript", 5) # Your audio example has variable speed, causing offset later
 	new_video(1.25, "res://W3L1-BinaryRelationsPart1.mp3", "res://Week 3 L1_ Binary Relations-transcript.txt", 11, 104) # Use this for later audio
 		#YOUR AUDIO has bad variable speed so off, but math should be right
-
-# NOTICE: There is nothing wrong with the math. If your audio becomes off, it may be variable speed.
-# WE assume audio is one speed.
 	
 # TODO: Audio player + settings of deliminators transcript - custom captions, etc.
 
@@ -50,8 +57,10 @@ func new_video(original_play_speed, audio_file_path, transcript_file_path = null
 	curr_video_time = start_time_offset + start_time
 	Timeline.value = start_time
 	
-	if File.new().file_exists(audio_file_path):
-		var audio = load(audio_file_path) 
+	if audio_file_path == null:
+		print("No audio file selected.")
+	elif File.new().file_exists(audio_file_path):
+		var audio = AudioImport.loadfile(audio_file_path) # load doesn't work on non-resource project files (!)
 		curr_audio.stream = audio
 		# Set max time on timeline to be video-audio length
 		Timeline.max_value = int(audio.get_length())
@@ -66,9 +75,13 @@ func new_video(original_play_speed, audio_file_path, transcript_file_path = null
 		curr_timed_captions = {}
 		cap_times = [] #TODO: make new function set_curr_timed_cap instead, use in set_new_trans too. (to auto-make cap_times]
 	
+	emit_signal("new_captions", curr_timed_captions)
+	
 	# Autoplay video that just loaded - the alternative has audio "popping" noise issue when first load
 	curr_audio.play(start_time)
 	One_Sec_Timer.start()
+	resume_video()
+	get_node("Timeline/Pause").pressed = false
 	
 func _on_Pause_toggled(button_pressed):
 	if button_pressed:
@@ -110,6 +123,8 @@ func get_closest_cap_time():
 		return cap_times[closest_index]
 
 # speed multiplier here is absolute.; ie. if original playback speed is 1.25, then multip of 1.25 has no effect
+const BUS_INDEX = 0
+const EFF_INDEX = 0
 func change_playback_speed(speed_multiplier):
 	# time and pitch scale are flipped calc since bigger time = slower, but bigger pitch = faster.
 	One_Sec_Timer.wait_time = 1 / speed_multiplier # For captions - assume captions timestamps are for playback speed 1
@@ -118,11 +133,18 @@ func change_playback_speed(speed_multiplier):
 	if curr_audio != null:
 		curr_audio.pitch_scale = float(speed_multiplier) / original_speed # The absolute playback speed, as relative to orignal
 		# https://godotengine.org/qa/88935/how-can-i-change-speed-of-an-audio-without-changing-its-pitch
-		# var shift = AudioServer.get_bus_effect(BUS_INDEX, EFF_INDEX)
-		# shift.pitch_scale = 1.0 / pitch
 		# Changing speed audio without pitch
-		# https://www.reddit.com/r/godot/comments/kzsmd1/gamedev_tip_how_to_change_music_speed_without/
-		# https://godotengine.org/qa/45137/speed-of-an-audio
+		if curr_audio.pitch_scale == 1:
+			if AudioServer.get_bus_effect_count(BUS_INDEX) > 0 and AudioServer.get_bus_effect(BUS_INDEX, EFF_INDEX) != null:
+				# Will remove the pitch shift effect if normal speed since the effect degrades audio quality, even at 
+				# normal playthrough speed
+				AudioServer.remove_bus_effect(BUS_INDEX, EFF_INDEX)
+		else:
+			if AudioServer.get_bus_effect_count(BUS_INDEX) == 0 or AudioServer.get_bus_effect(BUS_INDEX, EFF_INDEX) == null:
+				var shift = AudioEffectPitchShift.new()
+				AudioServer.add_bus_effect(BUS_INDEX, shift, EFF_INDEX)
+			var shift = AudioServer.get_bus_effect(BUS_INDEX, EFF_INDEX)
+			shift.pitch_scale = 1.0 / curr_audio.pitch_scale
 
 func pause_video():
 	One_Sec_Timer.paused = true
@@ -187,16 +209,25 @@ func set_new_transcript(file_path):
 # curr_player_time - current time of video player in seconds
 func set_current_caption(curr_player_time):
 	# times are sorted separately to make picking right timed caption easier
+	var old_caption = Caption.bbcode_text
 	var cap = ""
 	if curr_player_time in cap_times:
 		cap = curr_timed_captions[int(curr_player_time)]
 #		print(curr_video_time)
 #		print(cap)
-		Caption.bbcode_text= "[center]" + cap + "[/center]"
+		# First reset size to minimum so new text will fit perfectly.
+		Caption.bbcode_text = ""
+		Caption.rect_size.y = 29
+		Caption.bbcode_text = "[center]" + cap + "[/center]"
 #	else:
 #		print("did not set " + str(curr_player_time))
+	# emit signal if caption changes
+	if Caption.bbcode_text != old_caption:
+		emit_signal("caption_changed", cap)
 	return cap
-	
+
+# TODO: parse well known file formats of transcripts 
+# https://support.google.com/youtube/answer/2734698?hl=en#zippy=%2Cbasic-file-formats	
 	
 # Given transcript, separate times and caption
 # timestamp is in format [mm:ss]
@@ -282,3 +313,16 @@ func _on_Forward_pressed():
 
 func _on_Volume_changed(volume):
 	curr_audio.set_volume_db(volume)
+
+#var settings = {"transcripts" : [],
+#				"audio" : "",
+#				"original_speed" : 1,
+#				"audio_start_offset" : 0}
+func _on_load_new_video(settings):
+	var audio_file = settings["audio"]
+	var transcript_file = null
+	if settings["transcripts"].size() > 0:
+		transcript_file = settings["transcripts"][0] # will implement stacked transcripts in future
+	var og_play_speed = settings["original_speed"]
+	var offset_time = settings["audio_start_offset"]
+	new_video(og_play_speed, audio_file, transcript_file, offset_time) #start_time = 0

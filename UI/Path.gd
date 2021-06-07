@@ -17,14 +17,6 @@ func init(path, type):
 	
 func set_path_name(name):
 	path_name = name
-#	# for label, make text constant length for display
-#	if name.length() < LABEL_LENGTH:
-#		var spacing = ""
-#		for i in range(0, LABEL_LENGTH - name.length()):
-#			spacing += " "
-#		name += spacing
-#	else:
-#		name = name.substr(0, LABEL_LENGTH)
 	label.text = name
 
 func get_path_name():

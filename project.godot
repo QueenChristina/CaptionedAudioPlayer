@@ -10,9 +10,18 @@ config_version=4
 
 [application]
 
-config/name="Video Player"
+config/name="Captioned Audio Player"
 run/main_scene="res://VideoParts/Player.tscn"
+boot_splash/image="res://Splash.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.png"
+config/macos_native_icon="res://macos_icon.icns"
+config/windows_native_icon="res://windows_icon.ico"
+
+[autoload]
+
+AudioImport="*res://Plugins/AudioImport.gd"
 
 [display]
 

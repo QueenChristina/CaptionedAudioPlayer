@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://VideoParts/CapUnfocus.tres" type="StyleBox" id=1]
+[ext_resource path="res://VideoParts/Cap.gd" type="Script" id=2]
+
+[node name="Cap" type="Label"]
+margin_right = 98.0
+margin_bottom = 26.0
+focus_mode = 2
+mouse_filter = 0
+custom_styles/normal = ExtResource( 1 )
+valign = 1
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="gui_input" from="." to="." method="_on_Cap_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_Cap_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_Cap_mouse_exited"]
